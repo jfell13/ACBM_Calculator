@@ -1,11 +1,6 @@
 import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
-import sys
-import os
-
-!export DISPLAY=0.0
-!xhost +
 
 root = Tk()
 
