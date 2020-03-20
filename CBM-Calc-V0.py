@@ -4,8 +4,8 @@ from PIL import Image, ImageTk
 import sys
 import os
 
-export DISPLAY=0.0
-xhost +
+!export DISPLAY=0.0
+!xhost +
 
 root = Tk()
 
