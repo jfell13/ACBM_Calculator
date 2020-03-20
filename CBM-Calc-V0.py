@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
 
-root = Tk()
+root = tk.Tk()
 
 #canvas = Canvas(root, height=500, width=500, bg="#263D42")
 #canvas.grid()
