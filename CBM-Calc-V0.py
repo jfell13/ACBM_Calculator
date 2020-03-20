@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
+import matplotlib
+matplotlib.use('Agg')
 
 root = Tk()
 
