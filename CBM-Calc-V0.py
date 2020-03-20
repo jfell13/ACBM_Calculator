@@ -1,8 +1,12 @@
 import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
-import matplotlib
-matplotlib.use('Agg')
+import sys
+import os
+
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using :0.0')
+    os.environ.__setitem__('DISPLAY', ':0.0')
 
 root = Tk()
 
