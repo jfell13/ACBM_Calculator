@@ -1,0 +1,6 @@
+seaborn==0.9.0
+pandas
+argparse
+matplotlib
+PIL
+tk
