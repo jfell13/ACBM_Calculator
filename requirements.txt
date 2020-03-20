@@ -3,3 +3,5 @@ argparse
 pillow
 tk
 matplotlib
+sys
+os
