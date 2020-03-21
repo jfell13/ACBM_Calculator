@@ -3,3 +3,4 @@ argparse
 pillow
 tk
 matplotlib
+flask
