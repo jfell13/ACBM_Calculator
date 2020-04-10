@@ -1,9 +1,6 @@
 pandas
 argparse
 pillow
-tk
 matplotlib
-flask
 dash
-base64
-plotly
+base64==19.6
