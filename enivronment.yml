@@ -1,5 +1,6 @@
 channels:
   - conda-forge
 dependencies:
-  - ipyvolume
-  - appmode
+  - python=3.6.8
+  - dash
+  - nbserverproxy
