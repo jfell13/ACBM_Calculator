@@ -4,3 +4,6 @@ pillow
 tk
 matplotlib
 flask
+dash
+base64
+plotly
