@@ -1,1 +1,1 @@
-web: gunicorn application:CBM-calculator
+web: gunicorn application:application
