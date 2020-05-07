@@ -244,6 +244,8 @@ port = 8050
 
 def open_browser():
     webbrowser.open_new("http://localhost:{}".format(port))
+    
+application = app.server
 
 if __name__ == '__main__':
     Timer(0, open_browser).start();
