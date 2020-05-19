@@ -1,25 +1,5 @@
-from fixed_constants import *
+from constants import *
 import numpy as np
-
-###### Custom Starting Variables  #########
-cust_BRWV = float(20000)
-cust_FGF2Con = float(0.0001)
-cust_FGF2Cost = float(4010000)
-cust_Ug = 4.13E-13
-cust_GConInBM = float(0.0178)
-cust_MatTime = float(24)
-cust_hr_doub = float(8.0)
-cust_ACC = float(10000000)
-
-##### Media Related variables per scenario ########
-ACC = [float(10000000),float(95000000),float(95000000),float(200000000)] # Achievable cell concentration cells/mL
-Ug = [float(0.000000000000413),float(0.000000000000207),float(0.000000000000207),float(0.0000000000000413)] 
-# Ug = Glu. cons. rate per cell (mol/ h cell)
-MatTime = [240, 156, 156, 24] # Maturation Time (h)
-d = [24.0, 16.0, 16.0, 8.0] # Hours per doubling (h)
-FGF2Con = [float(0.0001),float(0.00005),float(0.00005),float(0.0)] # FGF-2 conc. (g/L)
-FGF2Cost = [float(4010000),float(2010000),float(0),float(0)] # FGF-2 cost (USD/g)
-GConInBM = [float(0.0178),float(0.0267),float(0.0267),float(0.0356)] # Glucose concentration in basal media (mol/L)
 
 ###### Functions for Calculating other variables ########
 
@@ -121,7 +101,7 @@ BioEquip2_total = BioEquip2 * 2
 BioEquip3_total = BioEquip3 * 2 
 BioEquip4_total = BioEquip4 * 2 
 BioEquip_Cust_total = BioEquip_Cust * 2
-# Fixed Manufacturing Costs
+# Fixed Manufacturing Costs = Minimal Capital Expenditures 
 Fix_Manu_Cost1 = BioEquip1_total * FixManuCost_Factor
 Fix_Manu_Cost2 = BioEquip2_total * FixManuCost_Factor
 Fix_Manu_Cost3 = BioEquip3_total * FixManuCost_Factor
