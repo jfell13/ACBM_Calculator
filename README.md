@@ -1,6 +1,5 @@
-# testGUICalc
-Example of making a GUI calculator
+# ACBM Cost Calculator
 
-This repo will load a sample GUI calculator.
+This repo is a ACBM cost calculator.
 
-This app is written in python and uses. Check it out on Heroku! https://test-jf-app.herokuapp.com/
+This app is written in python. Check it out on Heroku! https://test-jf-app.herokuapp.com/
