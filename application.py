@@ -118,7 +118,9 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 image_filename = 'The_University_of_California_Davis.svg.png' # replace with your own image
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
-app.layout = html.Div([     
+header = html.H3('The ACBM cost calculator.')
+
+body = html.Div([     
     html.Div([ # Block 1: Logo, Graph, and Custom Variables with Outputs
         html.Div([ # Left side: Logo
             html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), style={'height':'25%', 'width':'25%'}),
@@ -159,7 +161,7 @@ app.layout = html.Div([
 #             ], className="six columns"),
     html.Div([
         html.Div([
-             html.Label('Custom Cost Scales',
+             html.B('Custom Cost Scales',
                  style={'textAlign': 'center'}),
             # First Scale: Custom Bioreactor Working Volume
             html.Div([
@@ -314,6 +316,13 @@ app.layout = html.Div([
         dcc.LogoutButton(id="logout")],
         style={'marginBottom': 10,'marginTop': 10})
 ])
+
+app.layout = html.Div([
+        #nav,
+        header,
+        body#,
+        #output
+    ])
 
 ######## Begining of Callbacks #########
 
