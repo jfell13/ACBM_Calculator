@@ -1,5 +1,6 @@
 from constants import *
 import numpy as np
+import math
 
 ###### Functions for Calculating other variables ########
 
@@ -15,7 +16,7 @@ def total_glu_consume_growth(Mature_Time, scenario, doubling):
     glu_consumed = []
     for i in range(0,int(Mature_Time / doubling) + 1):
         glu_consumed.append(float((2**(i)) * scenario * doubling))
-    return sum(glu_consumed)
+    return float(sum(glu_consumed))
 
 def glucose_cons_in_mat(Vol,CellCount,ConsRate,MatureTime):
     consumed_in_mat = float(Vol * CellCount * 1000 * ConsRate * MatureTime)
@@ -58,11 +59,11 @@ Media_Vol3 = BRWV * MediaChargeBatch3
 Media_Vol4 = BRWV * MediaChargeBatch4
 cust_Media_Vol = cust_BRWV * cust_MediaChargeBatch
 # Bacthes per Year per BioReactor
-BatchPerYear1 = AnnOpTime / (MatTime[0] + growth_time(d[0]))
-BatchPerYear2 = AnnOpTime / (MatTime[1] + growth_time(d[1]))
-BatchPerYear3 = AnnOpTime / (MatTime[2] + growth_time(d[2]))
-BatchPerYear4 = AnnOpTime / (MatTime[3] + growth_time(d[3]))
-cust_BatchPerYear = AnnOpTime / (cust_MatTime + growth_time(cust_hr_doub))
+BatchPerYear1 = int(math.ceil(AnnOpTime / (MatTime[0] + growth_time(d[0]))))
+BatchPerYear2 = int(math.ceil(AnnOpTime / (MatTime[1] + growth_time(d[1]))))
+BatchPerYear3 = int(math.ceil(AnnOpTime / (MatTime[2] + growth_time(d[2]))))
+BatchPerYear4 = int(math.ceil(AnnOpTime / (MatTime[3] + growth_time(d[3]))))
+cust_BatchPerYear = int(math.ceil(AnnOpTime / (cust_MatTime + growth_time(cust_hr_doub))))
 
 CellMassBatch1 = cell_mass_per_batch(BRWV,ACC[0])
 CellMassBatch2 = cell_mass_per_batch(BRWV,ACC[1])
@@ -76,17 +77,17 @@ ACBM3 = CellMassBatch3 * BatchPerYear3
 ACBM4 = CellMassBatch4 * BatchPerYear4
 cust_ACBM = cust_CellMassBatch * cust_BatchPerYear
 # Calculated BioReactor numbers 
-BioReact1 = DesiredMassMeat / ACBM1
-BioReact2 = DesiredMassMeat / ACBM2
-BioReact3 = DesiredMassMeat / ACBM3
-BioReact4 = DesiredMassMeat / ACBM4
-cust_BioReact = DesiredMassMeat / cust_ACBM
+BioReact1 = int(math.ceil(DesiredMassMeat / ACBM1))
+BioReact2 = int(math.ceil(DesiredMassMeat / ACBM2))
+BioReact3 = int(math.ceil(DesiredMassMeat / ACBM3))
+BioReact4 = int(math.ceil(DesiredMassMeat / ACBM4))
+cust_BioReact = int(math.ceil(DesiredMassMeat / cust_ACBM))
 
-AnnBatches1 = BioReact1 * BatchPerYear1
-AnnBatches2 = BioReact2 * BatchPerYear2
-AnnBatches3 = BioReact3 * BatchPerYear3
-AnnBatches4 = BioReact4 * BatchPerYear4
-cust_AnnBatches = cust_BioReact * cust_BatchPerYear
+AnnBatches1 = int(math.ceil(BioReact1 * BatchPerYear1))
+AnnBatches2 = int(math.ceil(BioReact2 * BatchPerYear2))
+AnnBatches3 = int(math.ceil(BioReact3 * BatchPerYear3))
+AnnBatches4 = int(math.ceil(BioReact4 * BatchPerYear4))
+cust_AnnBatches = int(math.ceil(cust_BioReact * cust_BatchPerYear))
 
 BIOREACTORS = [BioReact1, BioReact2, BioReact3, BioReact4] # Bioreactor numbers
 # Costs for BioReactors
@@ -108,11 +109,11 @@ Fix_Manu_Cost3 = BioEquip3_total * FixManuCost_Factor
 Fix_Manu_Cost4 = BioEquip4_total * FixManuCost_Factor
 Fix_Manu_Cust_Cost = BioEquip_Cust_total * FixManuCost_Factor
 # Cost of Media per L
-Media_Cost1 = BMC + TGFB + Transferrin + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[0]*FGF2Cost[0])
-Media_Cost2 = BMC + TGFB + Transferrin + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[1]*FGF2Cost[1])
-Media_Cost3 = BMC + TGFB + Transferrin + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[2]*FGF2Cost[2])
-Media_Cost4 = BMC + TGFB + Transferrin + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[3]*FGF2Cost[3])
-cust_Media_Cost = BMC + TGFB + Transferrin + Insulin + NaSel + NaHCO3 + AA2D + (cust_FGF2Con * cust_FGF2Cost)
+Media_Cost1 = BMC + TGFB[0] + Transferrin[0] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[0]*FGF2Cost[0])
+Media_Cost2 = BMC + TGFB[1] + Transferrin[1] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[1]*FGF2Cost[1])
+Media_Cost3 = BMC + TGFB[2] + Transferrin[2] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[2]*FGF2Cost[2])
+Media_Cost4 = BMC + TGFB[3] + Transferrin[3] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[3]*FGF2Cost[3])
+cust_Media_Cost = BMC + TGFB[0] + Transferrin[0] + Insulin + NaSel + NaHCO3 + AA2D + (cust_FGF2Con * cust_FGF2Cost)
 # Annual Volume of Media
 AnnVolMedia1 = Media_Vol1 * AnnBatches1
 AnnVolMedia2 = Media_Vol2* AnnBatches2

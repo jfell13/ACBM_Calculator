@@ -1,5 +1,10 @@
+import math
 from constants import *
 from bioreactor_and_media import *
+from oxygen import *
+from energy import *
+from labor import *
+from non_electric import *
 
 Economic_Life = 20 # Years
 Cost_of_Equity = 0.15 # % per Y
@@ -49,3 +54,29 @@ cap_expend_with_debt_equity = [total_ann_payment[0]*Economic_Life,
                               total_ann_payment[2]*Economic_Life,
                               total_ann_payment[3]*Economic_Life,
                               total_ann_payment[4]*Economic_Life]
+
+###### Final Finance Values
+
+Min_Ann_Op_Cost1 = float(Fix_Manu_Cost1 + AnnMediaCost1 + Ann_O2_Cost1 + Elect_Cost1 + Ann_Labor_Cost1 + Ann_Water_Cost1)
+Min_Ann_Op_Cost2 = float(Fix_Manu_Cost2 + AnnMediaCost2 + Ann_O2_Cost2 + Elect_Cost2 + Ann_Labor_Cost2 + Ann_Water_Cost2)
+Min_Ann_Op_Cost3 = float(Fix_Manu_Cost3 + AnnMediaCost3 + Ann_O2_Cost3 + Elect_Cost3 + Ann_Labor_Cost3 + Ann_Water_Cost3)
+Min_Ann_Op_Cost4 = float(Fix_Manu_Cost4 + AnnMediaCost4 + Ann_O2_Cost4 + Elect_Cost4 + Ann_Labor_Cost4 + Ann_Water_Cost4)
+cust_Min_Ann_Op_Cost = float(Fix_Manu_Cust_Cost + cust_AnnMediaCost + cust_Ann_O2_Cost + cust_Elect_Cost + cust_Ann_Labor_Cost + cust_Ann_Water_Cost)
+
+Min_ACBM_tomeet_Exp1 = float(Min_Ann_Op_Cost1 / DesiredMassMeat)
+Min_ACBM_tomeet_Exp2 = float(Min_Ann_Op_Cost2 / DesiredMassMeat)
+Min_ACBM_tomeet_Exp3 = float(Min_Ann_Op_Cost3 / DesiredMassMeat)
+Min_ACBM_tomeet_Exp4 = float(Min_Ann_Op_Cost4 / DesiredMassMeat)
+cust_Min_ACBM_tomeet_Exp = float(cust_Min_Ann_Op_Cost / DesiredMassMeat)
+
+Min_Ann_Cap_Op_Expend1 = (BioEquip1_total / Economic_Life) + Min_Ann_Op_Cost1
+Min_Ann_Cap_Op_Expend2 = (BioEquip2_total / Economic_Life) + Min_Ann_Op_Cost2
+Min_Ann_Cap_Op_Expend3 = (BioEquip3_total / Economic_Life) + Min_Ann_Op_Cost3
+Min_Ann_Cap_Op_Expend4 = (BioEquip4_total / Economic_Life) + Min_Ann_Op_Cost4
+cust_Min_Ann_Cap_Op_Expend = (BioEquip_Cust_total / Economic_Life) + cust_Min_Ann_Op_Cost
+
+Min_ACBM_Price1 = float(Min_Ann_Cap_Op_Expend1 / DesiredMassMeat)
+Min_ACBM_Price2 = float(Min_Ann_Cap_Op_Expend2 / DesiredMassMeat)
+Min_ACBM_Price3 = float(Min_Ann_Cap_Op_Expend3 / DesiredMassMeat)
+Min_ACBM_Price4 = float(Min_Ann_Cap_Op_Expend4 / DesiredMassMeat)
+cust_Min_ACBM_Price = float(cust_Min_Ann_Cap_Op_Expend / DesiredMassMeat)
