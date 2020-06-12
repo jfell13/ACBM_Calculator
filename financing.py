@@ -10,6 +10,7 @@ Economic_Life = 20 # Years
 Cost_of_Equity = 0.15 # % per Y
 Debt_Interest_Rate = 0.05 # % per Y
 Debt_Ratio = 0.90
+Equity_Ratio = 1.00 - 0.90
 
 cap_rec_fac_num = (Cost_of_Equity * (1 + Cost_of_Equity)**Economic_Life)
 cap_rec_fac_denom = ((1 + Cost_of_Equity)**Economic_Life - 1)
@@ -19,41 +20,55 @@ debt_rec_fac_num = (Debt_Interest_Rate * (1 + Debt_Interest_Rate)**Economic_Life
 debt_rec_fac_denom = ((1 + Debt_Interest_Rate)**Economic_Life - 1)
 debt_rec_fac = debt_rec_fac_num / debt_rec_fac_denom
 
-def Ann_Debt_Payment(cap_exp):
-    Ann_Debt_Payment = float(cap_exp * Debt_Ratio * debt_rec_fac)
-    return float(Ann_Debt_Payment)
+def Total_Equity_Cost(bioreactor_cost):
+    return float(bioreactor_cost * Equity_Ratio)
 
-def Ann_Equity_Recov(cap_exp): 
-    Ann_Equity_Recov = float(cap_rec_fac * cap_exp * (1 - Debt_Ratio))
+def Ann_Equity_Recov(tot_equity): 
+    Ann_Equity_Recov = float(tot_equity * cap_rec_fac)
     return Ann_Equity_Recov
 
-def total_ann_payment_cap_exp(Ann_Debt_Payment,Ann_Equity_Recov):
-    total_ann_payment_cap_exp = float(Ann_Debt_Payment + Ann_Equity_Recov) # USD per Y
-    return total_ann_payment_cap_exp
+def Total_Debt_Cost(bioreactor_cost):
+    return float(bioreactor_cost * Debt_Ratio)
+    
+def Ann_Debt_Payment(tot_debt):
+    Ann_Debt_Payment = float(tot_debt * debt_rec_fac)
+    return float(Ann_Debt_Payment)
 
-annual_debt = [Ann_Debt_Payment(Fix_Manu_Cost1),
-               Ann_Debt_Payment(Fix_Manu_Cost2),
-               Ann_Debt_Payment(Fix_Manu_Cost3),
-               Ann_Debt_Payment(Fix_Manu_Cost4),
-               Ann_Debt_Payment(Fix_Manu_Cust_Cost)]
+tot_equity_cost1 = Total_Equity_Cost(BioEquip1_total)
+tot_equity_cost2 = Total_Equity_Cost(BioEquip2_total)
+tot_equity_cost3 = Total_Equity_Cost(BioEquip3_total)
+tot_equity_cost4 = Total_Equity_Cost(BioEquip4_total)
+cust_tot_equity_cost = Total_Equity_Cost(BioEquip_Cust_total)
 
-annual_equity = [Ann_Equity_Recov(Fix_Manu_Cost1),
-               Ann_Equity_Recov(Fix_Manu_Cost2),
-               Ann_Equity_Recov(Fix_Manu_Cost3),
-               Ann_Equity_Recov(Fix_Manu_Cost4),
-               Ann_Equity_Recov(Fix_Manu_Cust_Cost)]
+ann_equity_recov1 = Ann_Equity_Recov(tot_equity_cost1)
+ann_equity_recov2 = Ann_Equity_Recov(tot_equity_cost2)
+ann_equity_recov3 = Ann_Equity_Recov(tot_equity_cost3)
+ann_equity_recov4 = Ann_Equity_Recov(tot_equity_cost4)
+cust_ann_equity_recov = Ann_Equity_Recov(cust_tot_equity_cost)
 
-total_ann_payment = [total_ann_payment_cap_exp(annual_debt[0],annual_equity[0]),
-                    total_ann_payment_cap_exp(annual_debt[1],annual_equity[1]),
-                    total_ann_payment_cap_exp(annual_debt[2],annual_equity[2]),
-                    total_ann_payment_cap_exp(annual_debt[3],annual_equity[3]),
-                    total_ann_payment_cap_exp(annual_debt[4],annual_equity[4])]
+tot_debt_cost1 = Total_Debt_Cost(BioEquip1_total)
+tot_debt_cost2 = Total_Debt_Cost(BioEquip2_total)
+tot_debt_cost3 = Total_Debt_Cost(BioEquip3_total)
+tot_debt_cost4 = Total_Debt_Cost(BioEquip4_total)
+cust_tot_debt_cost = Total_Debt_Cost(BioEquip_Cust_total)
 
-cap_expend_with_debt_equity = [total_ann_payment[0]*Economic_Life,
-                              total_ann_payment[1]*Economic_Life,
-                              total_ann_payment[2]*Economic_Life,
-                              total_ann_payment[3]*Economic_Life,
-                              total_ann_payment[4]*Economic_Life]
+ann_debt_payment1 = Ann_Debt_Payment(tot_debt_cost1)
+ann_debt_payment2 = Ann_Debt_Payment(tot_debt_cost2)
+ann_debt_payment3 = Ann_Debt_Payment(tot_debt_cost3)
+ann_debt_payment4 = Ann_Debt_Payment(tot_debt_cost4)
+cust_ann_debt_payment = Ann_Debt_Payment(cust_tot_debt_cost)
+
+tot_ann_payment1 = ann_debt_payment1 + ann_equity_recov1
+tot_ann_payment2 = ann_debt_payment2 + ann_equity_recov2
+tot_ann_payment3 = ann_debt_payment3 + ann_equity_recov3
+tot_ann_payment4 = ann_debt_payment4 + ann_equity_recov4
+cust_tot_ann_payment = cust_ann_debt_payment + cust_ann_equity_recov
+
+cap_expend_with_debt_equity1 = tot_ann_payment1 * Economic_Life
+cap_expend_with_debt_equity2 = tot_ann_payment2 * Economic_Life
+cap_expend_with_debt_equity3 = tot_ann_payment3 * Economic_Life
+cap_expend_with_debt_equity4 = tot_ann_payment4 * Economic_Life
+cust_cap_expend_with_debt_equity = cust_tot_ann_payment * Economic_Life
 
 ###### Final Finance Values
 

@@ -2,14 +2,24 @@ import math
 from constants import *
 from bioreactor_and_media import *
 
-def total_O2_consume_growth(Mature_Time, starting_cell_count, doubling):
-    '''starting_cell_count = ACC'''
+def total_O2_consume_growth(ACC,doubling):
+    growth_time = float((np.log(100) / np.log(2)) * doubling)
+    cell_pop = []
+    rate = []
     O2_consumed = []
-    for i in range(0,int(Mature_Time / doubling) + 1):
-        curr_cell_count = float(2**(i) * starting_cell_count)
-        curr_o2_uptake = curr_cell_count * oxygen_comsump
-        O2_consumed.append(curr_o2_uptake * doubling)
-    return sum(O2_consumed)
+    end_time = doubling * int(growth_time // doubling)
+    for i in range(1, int(math.ceil(growth_time / doubling) + 1 )):
+        cell_count = (2**(i-1) * ACC * 200 * 1000)
+        cell_pop.append(cell_count)
+    for j in cell_pop:
+        O2_rate = j * oxygen_comsump
+        rate.append(O2_rate)    
+    for k in rate[:-1]:
+        O2_con = k * doubling
+        O2_consumed.append(O2_con)
+    O2_con_last = rate[-1] * (growth_time - end_time)
+    O2_consumed.append(O2_con_last)
+    return float(sum(O2_consumed))
 
 ## O2 Consumed In Maturation ##
 
@@ -29,11 +39,11 @@ cust_initial_O2_batch = float(((cust_MediaChargeBatch * cust_BRWV) * media_Densi
 
 ## Total O2 Consumed in Growth
 
-total_O2_cons_growth1 = float(total_O2_consume_growth(growth_time(d[0]),ACC[0],d[0]))
-total_O2_cons_growth2 = float(total_O2_consume_growth(growth_time(d[1]),ACC[1],d[1]))
-total_O2_cons_growth3 = float(total_O2_consume_growth(growth_time(d[2]),ACC[2],d[2]))
-total_O2_cons_growth4 = float(total_O2_consume_growth(growth_time(d[3]),ACC[3],d[3]))
-cust_total_O2_cons_growth = float(total_O2_consume_growth(growth_time(cust_hr_doub),cust_ACC,cust_hr_doub))
+total_O2_cons_growth1 = total_O2_consume_growth(ACC[0],d[0])
+total_O2_cons_growth2 = total_O2_consume_growth(ACC[1],d[1])
+total_O2_cons_growth3 = total_O2_consume_growth(ACC[2],d[2])
+total_O2_cons_growth4 = total_O2_consume_growth(ACC[3],d[3])
+cust_total_O2_cons_growth = total_O2_consume_growth(cust_ACC,cust_hr_doub)
 
 ## O2 Consumed per batch
 

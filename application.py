@@ -30,6 +30,11 @@ Elect_costs = [Elect_Cost1,Elect_Cost2,Elect_Cost3,Elect_Cost4,cust_Elect_Cost]
 Labor_costs = [Ann_Labor_Cost1,Ann_Labor_Cost2,Ann_Labor_Cost3,Ann_Labor_Cost4,cust_Ann_Labor_Cost]
 Non_Electric_costs =[Ann_Water_Cost1,Ann_Water_Cost2,Ann_Water_Cost3,Ann_Water_Cost4,cust_Ann_Water_Cost]
 Min_Ann_Op_Cost = [Min_Ann_Op_Cost1,Min_Ann_Op_Cost2,Min_Ann_Op_Cost3,Min_Ann_Op_Cost4,cust_Min_Ann_Op_Cost]
+cap_expend_with_debt_equity = [cap_expend_with_debt_equity1,
+                                       cap_expend_with_debt_equity2,
+                                       cap_expend_with_debt_equity3,
+                                       cap_expend_with_debt_equity4,
+                                       cust_cap_expend_with_debt_equity]
 Min_ACBM_tomeet_Exp = [Min_ACBM_tomeet_Exp1,
                        Min_ACBM_tomeet_Exp2,
                        Min_ACBM_tomeet_Exp3,
@@ -118,7 +123,7 @@ fig2 = go.Figure()
 fig2.add_trace(go.Bar(
     x=Scenarios,
     y=Min_Cap_Exp,
-    name='Minimal Capital Expeditures',
+    name='Min. Capital Expeditures',
     marker_color='#FFA505',
     offsetgroup=0,
     hovertemplate='Scenario: %{x}<br>Minimal Capital Expediture: %{y}<extra></extra>'
@@ -127,7 +132,7 @@ fig2.add_trace(go.Bar(
 fig2.add_trace(go.Bar(
     x=Scenarios,
     y=cap_expend_with_debt_equity,
-    name='Capital Expenditures (with debt and equity)',
+    name='Capital Expenditures (with debt & equity)',
     marker_color='#ff0586',
     offsetgroup=1,
     hovertemplate='Scenario: %{x}<br>Capital Expeditures: %{y}<extra></extra>'
@@ -136,7 +141,7 @@ fig2.add_trace(go.Bar(
 fig2.add_trace(go.Bar(
     x=Scenarios,
     y=Min_Ann_Op_Cost,
-    name='Minimum Annual Operating Costs',
+    name='Min. Ann. Op. Costs',
     marker_color='#6a2675',
     offsetgroup=2,
     hovertemplate='Scenario: %{x}<br>Minimum Annual Operating Cost: %{y}<extra></extra>'
@@ -145,7 +150,7 @@ fig2.add_trace(go.Bar(
 fig2.add_trace(go.Bar(
     x=Scenarios,
     y=Min_ACBM_tomeet_Exp,
-    name='Minimum price of ACBM to meet Annual Operating Expenses',
+    name='Min. price of ACBM for Ann. Op. Ex.',
     marker_color='firebrick',
     offsetgroup=3,
     hovertemplate='Scenario: %{x}<br>Minimum Price of ACBM To Meet Annual Operating Expenses: %{y}<extra></extra>'
@@ -154,16 +159,16 @@ fig2.add_trace(go.Bar(
 fig2.add_trace(go.Bar(
     x=Scenarios,
     y=Min_Ann_Cap_Op_Expend,
-    name='Minimum Annual Capital and Operating Expenditures',
+    name='Min. Ann. Capital & Op. Expend.',
     marker_color='#ff4500',
     offsetgroup=4,
-    hovertemplate='Scenario: %{x}<br>Minimum Annual Capital and Operating Expenditures: %{y}<extra></extra>'
+    hovertemplate='Scenario: %{x}<br>Minimum Annual Capital & Operating Expenditures: %{y}<extra></extra>'
 ))
 
 fig2.add_trace(go.Bar(
     x=Scenarios,
     y=Min_ACBM_Price,
-    name='Minimum price of ACBM to meet Annual Capital and Operating Expenses',
+    name='Min. price of ACBM for Ann. Capital & Op. Exp.',
     marker_color='#C7509F',
     offsetgroup=5,
     hovertemplate='Scenario: %{x}<br>Minimum price of ACBM to meet Annual Capital and Operating Expenses: %{y}<extra></extra>'
@@ -205,20 +210,44 @@ body = html.Div([
                     children=u'The custom fixed manufacturing cost is ${:20,.2f}.'.format(Fix_Manu_Cust_Cost)),
                 html.Div(id='cust_vol_media_batch_output', 
                          children=u'The custom volume of media per batch is {:20,.2f} L'.format(cust_Media_Vol)),
+                html.Div(id='cust_mediachargebatch_output', 
+                         children=u'The custom media charge per batch is {:20,.2f}.'.format(cust_MediaChargeBatch)),
+                html.Div(id='cust_TotCluConBatch_output',
+                        children=u'The custom total glucose consumed per batch is {:20,.2f}.'.format(cust_TotCluConBatch)),
+                html.Div(id='cust_GluInCharge_output',
+                        children=u'The custom glucose per charge is {:20,.2f}.'.format(cust_GluInCharge)),
+                html.Div(id='cust_GluCon_Mat_output',
+                        children=u'The custom glucose consumed during maturation is {:20,.2f}.'.format(cust_GluCon_Mat)),
+                html.Div(id='cust_GluCon_Growth_output',
+                        children=u'The custom glucose consumed during growth is {:20,.2f}.'.format(cust_GluCon_Growth)),
                 html.Div(id="cust_vol_media_output",
-                    children=u'The custom annual volume of media is ${:20,.2f} liter.'.format(cust_AnnVolMedia)),
+                    children=u'The custom annual volume of media is {:20,.2f} liter.'.format(cust_AnnVolMedia)),
                 html.Div(id="cust_media_cost_output",
                     children=u'The custom cost of media is ${:20,.2f} per liter.'.format(cust_Media_Cost)),
                 html.Div(id="annmediacost_output",
                     children=u'The custom annual cost of media is ${:20,.2f}.'.format(cust_AnnMediaCost)),
+                html.Div(id="annO2cons_output",
+                    children=u'The custom annual consumption of O2 is {:20,.2f}.'.format(cust_Ann_O2_Consum)),
+                html.Div(id="cust_O2_consum_batch_output",
+                    children=u'The custom consumption of O2 per batch is {:20,.2f}.'.format(cust_O2_consum_batch)),
                 html.Div(id="ann_o2_cost_output",
                     children=u'The custom annual cost of O2 is ${:20,.2f}.'.format(cust_Ann_O2_Cost)),
+                html.Div(id="cust_total_O2_cons_growth_output",
+                    children=u'The custom O2 consumed in growth phase is {:20,.2f}.'.format(cust_total_O2_cons_growth)),
                 html.Div(id="ann_energy_cost_output",
                     children=u'The custom annual energy cost is ${:20,.2f}.'.format(cust_Elect_Cost)),
+                html.Div(id="cust_total_Elect_output",
+                    children=u'The custom total energy requirement is {:20,.2f} kWh.'.format(cust_total_Elect)),
+                html.Div(id='cust_Elect_Cool_BioReact_output',
+                         children=u'The custom energy requirement to cool bioreactors is {:20,.2f} kWh.'.format(cust_Elect_Cool_BioReact)),
+                html.Div(id='cust_Elect_Heat_Media_output',
+                         children=u'The custom energy requirement to heat bioreactors is {:20,.2f} kWh.'.format(cust_Elect_Heat_Media)),
                 html.Div(id="ann_labor_cost_output",
                     children=u'The custom annual labor cost is ${:20,.2f}.'.format(cust_Ann_Labor_Cost)),
                 html.Div(id="ann_nonE_cost_output",
                     children=u'The custom annual non-electric utility cost is ${:20,.2f}.'.format(cust_Ann_Water_Cost)),
+                html.Div(id='cust_tot_ann_payment_output',
+                         children=u'The custom total annual payment with captial expenditures is ${:20,.2f}.'.format(cust_tot_ann_payment)),
                 dcc.Graph( # Output of Custom Operating Scenario Costs
                     id='graph2',
                     figure=fig2,
@@ -235,7 +264,7 @@ body = html.Div([
                 html.Div(id="cust_MinAnnCapOpExp_output",
                     children=u'The custom minimum annual capital and operating expenses are ${:20,.2f}.'.format(cust_Min_Ann_Cap_Op_Expend)),
                 html.Div(id="cust_MinACBM_output",
-                    children=u'The custom minimum price of ACBM to meet annual capital and operating expenses are ${:20,.2f} per kg.'.format(cust_Min_Ann_Op_Cost))
+                    children=u'The custom minimum price of ACBM to meet annual capital and operating expenses are ${:20,.2f} per kg.'.format(cust_Min_ACBM_Price))
             ])], 
             className="six columns",style={'marginBottom': 20}),
     html.Div([ # Block 2: Custom Cost Variable Scales
@@ -468,7 +497,19 @@ app.layout = html.Div([
      Output('cust_MinACBMPrice_AnOp_output','children'),
      Output('cust_MinAnnCapOpExp_output','children'),
      Output('cust_MinACBM_output','children'),
-     Output('cust_vol_media_batch_output','children')
+     Output('cust_vol_media_batch_output','children'),
+     Output('cust_mediachargebatch_output','children'),
+     Output('cust_TotCluConBatch_output','children'),
+     Output('cust_GluInCharge_output','children'),
+     Output('cust_GluCon_Mat_output','children'),
+     Output('cust_GluCon_Growth_output','children'),
+     Output('annO2cons_output','children'),
+     Output('cust_O2_consum_batch_output','children'),
+     Output('cust_total_O2_cons_growth_output','children'),
+     Output('cust_total_Elect_output','children'),
+     Output('cust_Elect_Cool_BioReact_output','children'),
+     Output('cust_Elect_Heat_Media_output','children'),
+     Output('cust_tot_ann_payment_output','children')
     ],
     [Input('bioreactslider','value'),
      Input('fgf2_gL_slider','value'),
@@ -494,8 +535,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_cust_GConInBM = slider8    
     # New Custom Media Cost Variables
     new_cust_GluCon_Mat = glucose_cons_in_mat(new_cust_BRWV,new_cust_ACC,new_cust_Ug,new_cust_MatTime)
-    new_cust_GluCon_Growth = float(total_glu_consume_growth(growth_time(new_cust_hr_doub),
-                                                            (new_cust_ACC * new_cust_Ug),new_cust_hr_doub))
+    new_cust_GluCon_Growth = total_glu_consume_growth(new_cust_ACC,new_cust_Ug,new_cust_hr_doub)
     new_cust_GluInCharge = float(new_cust_BRWV * new_cust_GConInBM)
     new_cust_TotCluConBatch = new_cust_GluCon_Growth + new_cust_GluCon_Mat
     new_cust_MediaChargeBatch = new_cust_TotCluConBatch / new_cust_GluInCharge
@@ -508,14 +548,21 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_BioEquip_Cust = new_cust_BioReact * tot_fixed_eq_costs
     new_BioEquip_Cust_total = new_BioEquip_Cust * 2
     new_Fix_Manu_Cust_Cost = new_BioEquip_Cust_total * FixManuCost_Factor
-    new_cust_Media_Cost = BMC + TGFB[0] + Transferrin[0] + Insulin + NaSel + NaHCO3 + AA2D + (new_cust_FGF2Con * new_cust_FGF2Cost)
+    new_cust_Media_Cost = float(BaseMedia_cost + 
+                        TGFB[0] + 
+                        Transferrin[0] + 
+                        (Insulin_cost * Insulin_conc) + 
+                        (NaSe_cost * NaSe_conc) + 
+                        (NaHCO3_cost * NaHCO3_conc) + 
+                        (AA2p_cost * AA2P_conc) + 
+                        (new_cust_FGF2Con * new_cust_FGF2Cost))
     new_cust_AnnVolMedia = new_cust_Media_Vol * new_cust_AnnBatches
     new_cust_AnnMediaCost = new_cust_AnnVolMedia * new_cust_Media_Cost
     # New O2 Custom Costs
     new_cust_O2_cons_in_mat = float((new_cust_BRWV * new_cust_ACC * 1000) * new_cust_MatTime * oxygen_comsump)
     new_cust_initial_O2_batch = float(((new_cust_MediaChargeBatch * new_cust_BRWV) 
                                        * media_Density * perc_O2_initial_charge) / mm_O2)
-    new_cust_total_O2_cons_growth = float(total_O2_consume_growth(growth_time(new_cust_hr_doub),new_cust_ACC,new_cust_hr_doub))
+    new_cust_total_O2_cons_growth = total_O2_consume_growth(new_cust_ACC,new_cust_hr_doub)
     new_cust_O2_consum_batch = new_cust_total_O2_cons_growth + new_cust_initial_O2_batch + new_cust_O2_cons_in_mat
     new_cust_Ann_O2_Consum = (new_cust_O2_consum_batch * mm_O2 * new_cust_AnnBatches)/1000
     new_cust_Ann_O2_Cost = new_cust_Ann_O2_Consum * cost_O2
@@ -532,10 +579,12 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_cust_Process_Water = new_cust_AnnVolMedia / 1000
     new_cust_Ann_Water_Cost = new_cust_Process_Water * (Process_Water_Cost + Waste_Water_Cost + Oxidation_Water_Cost)
     # New Financing Values
-    new_cust_Ann_Debt_Payment = Ann_Debt_Payment(new_Fix_Manu_Cust_Cost)
-    new_cust_Ann_Equity_Recov = Ann_Equity_Recov(new_Fix_Manu_Cust_Cost)
-    new_cust_total_ann_payment = total_ann_payment_cap_exp(new_cust_Ann_Debt_Payment,new_cust_Ann_Equity_Recov)
-    new_cust_cap_expend_with_debt_equity = float(new_cust_total_ann_payment * Economic_Life)
+    new_cust_tot_equity_cost = Total_Equity_Cost(new_BioEquip_Cust_total)
+    new_cust_ann_equity_recov = Ann_Equity_Recov(new_cust_tot_equity_cost)
+    new_cust_tot_debt_cost = Total_Debt_Cost(new_BioEquip_Cust_total)
+    new_cust_ann_debt_payment = Ann_Debt_Payment(cust_tot_debt_cost)
+    new_cust_tot_ann_payment = new_cust_ann_debt_payment + new_cust_ann_equity_recov
+    new_cust_cap_expend_with_debt_equity = float(new_cust_tot_ann_payment * Economic_Life)
     new_cust_Min_Ann_Op_Cost = float(new_Fix_Manu_Cust_Cost + 
                                      new_cust_AnnMediaCost + 
                                      new_cust_Ann_O2_Cost + 
@@ -554,10 +603,10 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_Elect_costs = [Elect_Cost1,Elect_Cost2,Elect_Cost3,Elect_Cost4,new_cust_Elect_Cost]
     new_Labor_costs = [Ann_Labor_Cost1,Ann_Labor_Cost2,Ann_Labor_Cost3,Ann_Labor_Cost4,new_cust_Ann_Labor_Cost]
     new_Non_Electric_costs =[Ann_Water_Cost1,Ann_Water_Cost2,Ann_Water_Cost3,Ann_Water_Cost4,new_cust_Ann_Water_Cost]
-    new_cap_expend_with_debt_equity = [total_ann_payment[0]*Economic_Life,
-                                       total_ann_payment[1]*Economic_Life,
-                                       total_ann_payment[2]*Economic_Life,
-                                       total_ann_payment[3]*Economic_Life,
+    new_cap_expend_with_debt_equity = [cap_expend_with_debt_equity1,
+                                       cap_expend_with_debt_equity2,
+                                       cap_expend_with_debt_equity3,
+                                       cap_expend_with_debt_equity4,
                                        new_cust_cap_expend_with_debt_equity]
     new_Min_Ann_Op_Cost = [Min_Ann_Op_Cost1,
                            Min_Ann_Op_Cost2,
@@ -639,7 +688,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_fig2.add_trace(go.Bar(
         x=Scenarios,
         y=new_Min_Cap_exp,
-        name='Minimal Capital Expeditures',
+        name='Min. Capital Expeditures',
         marker_color='#FFA505',
         offsetgroup=0,
         hovertemplate='Scenario: %{x}<br>Minimal Capital Expediture: %{y}<extra></extra>'
@@ -647,7 +696,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_fig2.add_trace(go.Bar(
         x=Scenarios,
         y=new_cap_expend_with_debt_equity,
-        name='Capital Expenditures (with debt and equity)',
+        name='Capital Expenditures (with debt & equity)',
         marker_color='#ff0586',
         offsetgroup=1,
         hovertemplate='Scenario: %{x}<br>Capital Expeditures: %{y}<extra></extra>'
@@ -655,7 +704,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_fig2.add_trace(go.Bar(
         x=Scenarios,
         y=new_Min_Ann_Op_Cost,
-        name='Minimum Annual Operating Costs',
+        name='Min. Ann. Op. Costs',
         marker_color='#6a2675',
         offsetgroup=2,
         hovertemplate='Scenario: %{x}<br>Minimum Annual Operating Cost: %{y}<extra></extra>'
@@ -663,7 +712,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_fig2.add_trace(go.Bar(
         x=Scenarios,
         y=new_Min_ACBM_tomeet_Exp,
-        name='Minimum price of ACBM to meet Annual Operating Expenses',
+        name='Min. price of ACBM for Ann. Op. Exp.',
         marker_color='firebrick',
         offsetgroup=3,
         hovertemplate='Scenario: %{x}<br>Minimum price of ACBM to meet Annual Operating Expenses: %{y}<extra></extra>'
@@ -671,7 +720,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_fig2.add_trace(go.Bar(
         x=Scenarios,
         y=new_Min_Ann_Cap_Op_Expend,
-        name='Minimum Annual Capital and Operating Expenditures',
+        name='Min. Ann. Capital & Op. Expend.',
         marker_color='#ff4500',
         offsetgroup=4,
         hovertemplate='Scenario: %{x}<br>Minimum Annual Capital and Operating Expenditures: %{y}<extra></extra>'
@@ -679,7 +728,7 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
     new_fig2.add_trace(go.Bar(
         x=Scenarios,
         y=new_Min_ACBM_Price,
-        name='Minimum price of ACBM to meet Annual Capital and Operating Expenses',
+        name='Min. price of ACBM for Ann. Capital & Op. Exp.',
         marker_color='#C7509F',
         offsetgroup=5,
         hovertemplate='Scenario: %{x}<br>Minimum price of ACBM to meet Annual Capital and Operating Expenses: %{y}<extra></extra>'
@@ -698,13 +747,25 @@ def update_figure(slider1,slider2,slider3,slider4,slider5,slider6,slider7,slider
             u'The custom annual non-electric utility cost is ${:20,.2f}.'.format(new_cust_Ann_Water_Cost),
             new_fig2,
             u'The custom number of annual batches is {:20}.'.format(int(new_cust_AnnBatches)),
-            u'The custom annual volume of media is ${:20,.2f} liter.'.format(new_cust_AnnVolMedia),
+            u'The custom annual volume of media is {:20,.2f} liter.'.format(new_cust_AnnVolMedia),
             u'The custom capital expenditures, with debt and equity recovery, is ${:20,.2f}.'.format(new_cust_cap_expend_with_debt_equity),
             u'The custom minimum annual operating costs are ${:20,.2f}.'.format(new_cust_Min_Ann_Op_Cost),
             u'The custom minimum price of ACBM to meet annual operating expenses are ${:20,.2f} per kg.'.format(new_cust_Min_ACBM_tomeet_Exp),
             u'The custom minimum annual capital and operating expenses are ${:20,.2f}.'.format(new_cust_Min_Ann_Cap_Op_Expend),
-            u'The custom minimum price of ACBM to meet annual capital and operating expenses are ${:20,.2f} per kg.'.format(new_cust_Min_Ann_Op_Cost),
-            u'The custom volume of media per batch is {:20,.2f} L'.format(new_cust_Media_Vol)
+            u'The custom minimum price of ACBM to meet annual capital and operating expenses are ${:20,.2f} per kg.'.format(new_cust_Min_ACBM_Price),
+            u'The custom volume of media per batch is {:20,.2f} L'.format(new_cust_Media_Vol),
+            u'The custom media charge per batch is {:20,.2f}.'.format(new_cust_MediaChargeBatch),
+            u'The custom total glucose consumed per batch is {:20,.2f}.'.format(new_cust_TotCluConBatch),
+            u'The custom glucose per charge is {:20,.2f}.'.format(cust_GluInCharge),
+            u'The custom glucose consumed during maturation is {:20,.2f}.'.format(new_cust_GluCon_Mat),
+            u'The custom glucose consumed during growth is {:20,.2f}.'.format(cust_GluCon_Growth),
+            u'The custom annual consumption of O2 is {:20,.2f}.'.format(new_cust_Ann_O2_Consum),
+            u'The custom consumption of O2 per batch is {:20,.2f}.'.format(new_cust_O2_consum_batch),
+            u'The custom O2 consumed in growth phase is {:20,.2f}.'.format(new_cust_total_O2_cons_growth),
+            u'The custom total energy requirement is {:20,.2f} kWh.'.format(new_cust_total_Elect),
+            u'The custom energy requirement to cool bioreactors is {:20,.2f} kWh.'.format(new_cust_Elect_Cool_BioReact),
+            u'The custom energy requirement to heat bioreactors is {:20,.2f} kWh.'.format(new_cust_Elect_Heat_Media),
+            u'The custom total annual payment with captial expenditures is ${:20,.2f}.'.format(new_cust_tot_ann_payment)
            ]
 
 ##Bioreactor Slider Chained Callbacks ##

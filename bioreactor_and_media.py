@@ -12,11 +12,24 @@ def cell_mass_per_batch(Vol,CellCount):
     mass_per = float(Vol * AveCellDensity * AveCellVol * 1000 * CellCount)
     return mass_per
 
-def total_glu_consume_growth(Mature_Time, scenario, doubling):
+def total_glu_consume_growth(ACC, Ug, doubling):
+    growth_time = float((np.log(100) / np.log(2)) * doubling)
+    cell_pop = []
+    rate = []
     glu_consumed = []
-    for i in range(0,int(Mature_Time / doubling) + 1):
-        glu_consumed.append(float((2**(i)) * scenario * doubling))
-    return float(sum(glu_consumed))
+    end_time = doubling * int(growth_time // doubling)
+    for i in range(1, int(math.ceil(growth_time / doubling) + 1 )):
+        cell_count = (2**(i-1) * ACC * 200 * 1000)
+        cell_pop.append(cell_count)
+    for j in cell_pop:
+        g_rate = j * Ug
+        rate.append(g_rate)
+    for k in rate[:-1]:
+        g_con = k * doubling
+        glu_consumed.append(g_con)
+    g_con_last = rate[-1] * (growth_time - end_time)
+    glu_consumed.append(g_con_last)
+    return float(round(sum(glu_consumed),2))
 
 def glucose_cons_in_mat(Vol,CellCount,ConsRate,MatureTime):
     consumed_in_mat = float(Vol * CellCount * 1000 * ConsRate * MatureTime)
@@ -29,16 +42,16 @@ GluConInMatPhase3 = glucose_cons_in_mat(BRWV,ACC[2],Ug[2],MatTime[2])
 GluConInMatPhase4 = glucose_cons_in_mat(BRWV,ACC[3],Ug[3],MatTime[3])
 cust_GluCon_Mat = glucose_cons_in_mat(cust_BRWV,cust_ACC,float(cust_Ug),cust_MatTime)
 
-GluConInGrowthPhase1 = float(total_glu_consume_growth(growth_time(d[0]),(ACC[0] * Ug[0]),d[0]))
-GluConInGrowthPhase2 = float(total_glu_consume_growth(growth_time(d[1]),(ACC[1] * Ug[1]),d[1]))
-GluConInGrowthPhase3 = float(total_glu_consume_growth(growth_time(d[2]),(ACC[2] * Ug[2]),d[2]))
-GluConInGrowthPhase4 = float(total_glu_consume_growth(growth_time(d[3]),(ACC[3] * Ug[3]),d[3]))
-cust_GluCon_Growth = float(total_glu_consume_growth(growth_time(cust_hr_doub),(cust_ACC * float(cust_Ug)),cust_hr_doub))
+GluConInGrowthPhase1 = total_glu_consume_growth(ACC[0],Ug[0],d[0])
+GluConInGrowthPhase2 = total_glu_consume_growth(ACC[1],Ug[1],d[1])
+GluConInGrowthPhase3 = total_glu_consume_growth(ACC[2],Ug[2],d[2])
+GluConInGrowthPhase4 = total_glu_consume_growth(ACC[3],Ug[3],d[3])
+cust_GluCon_Growth = total_glu_consume_growth(cust_ACC,cust_Ug,cust_hr_doub)
 # Total Glucose in Charge (mol)
-GluInCharge1 = float(BRWV * GConInBM[0])
-GluInCharge2 = float(BRWV * GConInBM[1])
-GluInCharge3 = float(BRWV * GConInBM[2])
-GluInCharge4 = float(BRWV * GConInBM[3])
+GluInCharge1 = BRWV * GConInBM[0]
+GluInCharge2 = BRWV * GConInBM[1]
+GluInCharge3 = BRWV * GConInBM[2]
+GluInCharge4 = BRWV * GConInBM[3]
 cust_GluInCharge = float(cust_BRWV * cust_GConInBM)
 # Total Glucose Consumed per Batch (mol)
 TotGluConBatch1 = GluConInGrowthPhase1 + GluConInMatPhase1
@@ -59,11 +72,11 @@ Media_Vol3 = BRWV * MediaChargeBatch3
 Media_Vol4 = BRWV * MediaChargeBatch4
 cust_Media_Vol = cust_BRWV * cust_MediaChargeBatch
 # Bacthes per Year per BioReactor
-BatchPerYear1 = int(math.ceil(AnnOpTime / (MatTime[0] + growth_time(d[0]))))
-BatchPerYear2 = int(math.ceil(AnnOpTime / (MatTime[1] + growth_time(d[1]))))
-BatchPerYear3 = int(math.ceil(AnnOpTime / (MatTime[2] + growth_time(d[2]))))
-BatchPerYear4 = int(math.ceil(AnnOpTime / (MatTime[3] + growth_time(d[3]))))
-cust_BatchPerYear = int(math.ceil(AnnOpTime / (cust_MatTime + growth_time(cust_hr_doub))))
+BatchPerYear1 = math.ceil(AnnOpTime / (MatTime[0] + growth_time(d[0])))
+BatchPerYear2 = math.ceil(AnnOpTime / (MatTime[1] + growth_time(d[1])))
+BatchPerYear3 = math.ceil(AnnOpTime / (MatTime[2] + growth_time(d[2])))
+BatchPerYear4 = math.ceil(AnnOpTime / (MatTime[3] + growth_time(d[3])))
+cust_BatchPerYear = math.ceil(AnnOpTime / (cust_MatTime + growth_time(cust_hr_doub)))
 
 CellMassBatch1 = cell_mass_per_batch(BRWV,ACC[0])
 CellMassBatch2 = cell_mass_per_batch(BRWV,ACC[1])
@@ -109,14 +122,49 @@ Fix_Manu_Cost3 = BioEquip3_total * FixManuCost_Factor
 Fix_Manu_Cost4 = BioEquip4_total * FixManuCost_Factor
 Fix_Manu_Cust_Cost = BioEquip_Cust_total * FixManuCost_Factor
 # Cost of Media per L
-Media_Cost1 = BMC + TGFB[0] + Transferrin[0] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[0]*FGF2Cost[0])
-Media_Cost2 = BMC + TGFB[1] + Transferrin[1] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[1]*FGF2Cost[1])
-Media_Cost3 = BMC + TGFB[2] + Transferrin[2] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[2]*FGF2Cost[2])
-Media_Cost4 = BMC + TGFB[3] + Transferrin[3] + Insulin + NaSel + NaHCO3 + AA2D + (FGF2Con[3]*FGF2Cost[3])
-cust_Media_Cost = BMC + TGFB[0] + Transferrin[0] + Insulin + NaSel + NaHCO3 + AA2D + (cust_FGF2Con * cust_FGF2Cost)
+Media_Cost1 = float(BaseMedia_cost + 
+                    TGFB[0] + 
+                    Transferrin[0] + 
+                    (Insulin_cost*Insulin_conc) + 
+                    (NaSe_cost*NaSe_conc) + 
+                    (NaHCO3_cost*NaHCO3_conc) + 
+                    (AA2p_cost*AA2P_conc) + 
+                    (FGF2Con[0]*FGF2Cost[0]))
+Media_Cost2 = float(BaseMedia_cost + 
+                    TGFB[1] + 
+                    Transferrin[1] + 
+                    (Insulin_cost*Insulin_conc) + 
+                    (NaSe_cost*NaSe_conc) + 
+                    (NaHCO3_cost*NaHCO3_conc) + 
+                    (AA2p_cost*AA2P_conc) + 
+                    (FGF2Con[1]*FGF2Cost[1]))
+Media_Cost3 = float(BaseMedia_cost + 
+                    TGFB[2] + 
+                    Transferrin[2] + 
+                    (Insulin_cost*Insulin_conc) + 
+                    (NaSe_cost*NaSe_conc) + 
+                    (NaHCO3_cost*NaHCO3_conc) + 
+                    (AA2p_cost*AA2P_conc) + 
+                    (FGF2Con[2]*FGF2Cost[2]))
+Media_Cost4 = float(BaseMedia_cost + 
+                    TGFB[3] + 
+                    Transferrin[3] + 
+                    (Insulin_cost*Insulin_conc) + 
+                    (NaSe_cost*NaSe_conc) + 
+                    (NaHCO3_cost*NaHCO3_conc) + 
+                    (AA2p_cost*AA2P_conc) + 
+                    (FGF2Con[3]*FGF2Cost[3]))
+cust_Media_Cost = float(BaseMedia_cost + 
+                        TGFB[0] + 
+                        Transferrin[0] + 
+                        (Insulin_cost*Insulin_conc) + 
+                        (NaSe_cost*NaSe_conc) + 
+                        (NaHCO3_cost*NaHCO3_conc) + 
+                        (AA2p_cost*AA2P_conc) + 
+                        (cust_FGF2Con*cust_FGF2Cost))
 # Annual Volume of Media
 AnnVolMedia1 = Media_Vol1 * AnnBatches1
-AnnVolMedia2 = Media_Vol2* AnnBatches2
+AnnVolMedia2 = Media_Vol2 * AnnBatches2
 AnnVolMedia3 = Media_Vol3 * AnnBatches3
 AnnVolMedia4 = Media_Vol4 * AnnBatches4
 cust_AnnVolMedia = cust_Media_Vol * cust_AnnBatches
