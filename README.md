@@ -1,5 +1,5 @@
 # ACBM Cost Calculator
 
-This repo is a ACBM cost calculator.
+This repository houses the Animal Cell Based Meat cost calculator. This repository only houses the code, which will be set to public once the manuscript is published. Please email jsfell@ucdavis.edu if you would like to review the code.
 
-This app is written in python. Check it out on Heroku! https://test-jf-app.herokuapp.com/
+In the meantime you can check it out on Heroku! https://test-jf-app.herokuapp.com/
