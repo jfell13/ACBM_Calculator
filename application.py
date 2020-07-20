@@ -193,6 +193,8 @@ body = html.Div([
             html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), style={'height':'25%', 'width':'25%'}),
             html.Div(children='This Cell-Based-Meat calculator app was written by Dr. Jason S. Fell.'),
             html.Div(children='This calculator is based upon the [PAPER CITATION].'),
+            html.Div(children='The code will be released when the manuscript is published.'),
+            html.Div(children='Please send email to jsfell@ucdavis.edu if you would like to review the code.'),
             html.Div([
                 dcc.Graph( # Output of Custom Annual Scenario Values
                     id='graph1',
